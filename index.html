@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>No Mod Zero-Lag Pokemon PetArmy Plugin v1.0 (MC 26.3) — Download</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0f1117; color: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; }
+    .card { background: #181c27; border: 1px solid #2a3142; border-radius: 16px; max-width: 440px; width: 100%; padding: 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.45); text-align: center; }
+    h1 { font-size: 1.35rem; margin: 0 0 8px; color: #38bdf8; }
+    p { color: #94a3b8; font-size: 0.92rem; margin: 0 0 22px; }
+    .step { display: flex; align-items: center; justify-content: space-between; background: #222838; border: 1px solid #333c52; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; color: #fff; font-weight: 600; user-select: none; -webkit-tap-highlight-color: transparent; }
+    .step:hover { border-color: #38bdf8; }
+    .step.done { border-color: #22c55e; background: #162b22; color: #86efac; }
+    .badge { font-size: 0.8rem; padding: 4px 10px; border-radius: 999px; background: #ef4444; color: #fff; pointer-events: none; }
+    .step.done .badge { background: #22c55e; color: #052e16; }
+    #downloadBtn { display: block; width: 100%; margin-top: 20px; padding: 14px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 700; background: #334155; color: #64748b; cursor: not-allowed; text-decoration: none; box-sizing: border-box; }
+    #downloadBtn.unlocked { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>💻 No Mod [Zero-Lag Pokemon PetArmy Plugin v1.0 (MC 26.3)</h1>
+    <p>Complete the 3 quick steps below to unlock <strong>PetArmy.jar + READ ME.txt</strong>:</p>
+
+    <div class="step" id="step1" onclick="completeStep(1, 'https://www.youtube.com/@mcsfcoder')">
+      <span>1. Subscribe on YouTube</span>
+      <span class="badge" id="badge1">Subscribe</span>
+    </div>
+
+    <div class="step" id="step2" onclick="completeStep(2, 'https://youtu.be/pl3xbvQye6I?si=KGr6ya_hbAwtEYmR')">
+      <span>2. Like the YouTube Video</span>
+      <span class="badge" id="badge2">Like</span>
+    </div>
+
+    <div class="step" id="step3" onclick="shareVideo()">
+      <span id="step3Text">3. Share Video (0 / 3)</span>
+      <span class="badge" id="badge3">Share</span>
+    </div>
+
+    <a id="downloadBtn" href="javascript:void(0)">🔒 Complete All 3 Steps to Unlock</a>
+  </div>
+
+  <script>
+    const DOWNLOAD_URL = "https://www.patreon.com/mcsfcoder/posts/no-mods-required-176317822";
+    const VIDEO_URL = "https://youtu.be/pl3xbvQye6I?si=KGr6ya_hbAwtEYmR";
+    let s1 = false, s2 = false, shares = 0, step3Busy = false;
+
+    function completeStep(num, url) {
+      try { window.open(url, "_blank"); } catch (e) {}
+      const badge = document.getElementById("badge" + num);
+      badge.textContent = "Checking...";
+      setTimeout(() => {
+        document.getElementById("step" + num).classList.add("done");
+        badge.textContent = "✓ Done";
+        if (num === 1) s1 = true;
+        if (num === 2) s2 = true;
+        checkUnlock();
+      }, 6000);
+    }
+
+    function copyFallback(text) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).catch(() => {});
+        } else {
+          const el = document.createElement("textarea");
+          el.value = text;
+          document.body.appendChild(el);
+          el.select();
+          document.execCommand("copy");
+          document.body.removeChild(el);
+        }
+      } catch (e) {}
+    }
+
+    function shareVideo() {
+      if (shares >= 3 || step3Busy) return;
+      step3Busy = true;
+
+      try {
+        if (navigator.share) {
+          navigator.share({ title: "Minecraft 26.3 Pokemon PetArmy Plugin", url: VIDEO_URL }).catch(() => copyFallback(VIDEO_URL));
+        } else {
+          copyFallback(VIDEO_URL);
+        }
+      } catch (e) {
+        copyFallback(VIDEO_URL);
+      }
+
+      const badge = document.getElementById("badge3");
+      badge.textContent = "Wait 3s...";
+
+      setTimeout(() => {
+        badge.textContent = "Checking...";
+        setTimeout(() => {
+          shares++;
+          step3Busy = false;
+          document.getElementById("step3Text").textContent = "3. Share Video (" + shares + " / 3)";
+          if (shares >= 3) {
+            document.getElementById("step3").classList.add("done");
+            badge.textContent = "✓ Done";
+          } else {
+            badge.textContent = "Share";
+          }
+          checkUnlock();
+        }, 2000);
+      }, 3000);
+    }
+
+    function checkUnlock() {
+      if (s1 && s2 && shares >= 3) {
+        const btn = document.getElementById("downloadBtn");
+        btn.classList.add("unlocked");
+        btn.href = DOWNLOAD_URL;
+        btn.textContent = "⬇ Download PetArmy.jar + READ ME.txt";
+      }
+    }
+  </script>
+</body>
+</html>
